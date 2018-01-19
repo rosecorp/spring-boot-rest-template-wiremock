@@ -22,7 +22,6 @@ public class RestGatewayService {
     @Value("${third.party.host}")
     private String host;
 
-
     private RestTemplate restTemplate;
     private WireMockServer wireMockServer;
 
