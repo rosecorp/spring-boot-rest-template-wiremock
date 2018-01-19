@@ -18,8 +18,7 @@ public class AsyncRestGatewayService {
 
     public String retrieveDataAsync() throws TimeoutException {
         long startTime = System.nanoTime();
-
-
+        
         CompletableFuture<String> google =
                 CompletableFuture.supplyAsync(this::retrieveDataGoogle);
 
