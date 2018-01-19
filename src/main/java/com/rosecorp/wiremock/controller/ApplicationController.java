@@ -28,7 +28,7 @@ public class ApplicationController {
 
     @RequestMapping(path = "async", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public String async() {
+    public String async() throws Exception {
         return asyncRestGatewayService.retrieveDataAsync();
     }
 

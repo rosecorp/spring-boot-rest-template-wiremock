@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class AsyncRestGatewayService {
@@ -15,16 +16,26 @@ public class AsyncRestGatewayService {
         restTemplate = new RestTemplate();
     }
 
-    public String retrieveDataAsync() {
+    public String retrieveDataAsync() throws TimeoutException {
         long startTime = System.nanoTime();
+
+
         CompletableFuture<String> google =
                 CompletableFuture.supplyAsync(this::retrieveDataGoogle);
 
         CompletableFuture<String> bing =
                 CompletableFuture.supplyAsync(this::retrieveDataBing);
 
+        CompletableFuture<String> google2 =
+                CompletableFuture.supplyAsync(this::retrieveDataGoogle);
+
+        CompletableFuture<String> bing2 =
+                CompletableFuture.supplyAsync(this::retrieveDataBing);
+
         CompletableFuture<String> combinedFuture = google
-                .thenCombine(bing, (a, b) -> a.toString() + b.toString());
+                .thenCombine(bing, (a, b) -> a.toString() + b.toString())
+                .thenCombine(bing2, (a, b) -> a.toString() + b.toString())
+                .thenCombine(google2, (a, b) -> a.toString() + b.toString());
 
         String data = combinedFuture.join();
 
@@ -36,10 +47,12 @@ public class AsyncRestGatewayService {
 
     public String retrieveData() {
         long startTime = System.nanoTime();
-        String google = retrieveDataGoogle();
 
+        String google = retrieveDataGoogle();
         String bing = retrieveDataBing();
-        String data = google + bing;
+        String google2 = retrieveDataGoogle();
+        String bing2 = retrieveDataBing();
+        String data = google + bing + google2 + bing2;
 
         long estimatedTime = System.nanoTime() - startTime;
         System.out.println("non - async retrieve data: " + estimatedTime);
@@ -70,4 +83,5 @@ public class AsyncRestGatewayService {
 
         return response.getBody();
     }
+
 }
