@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ApplicationController {
 
     @Autowired
@@ -18,7 +18,7 @@ public class ApplicationController {
     @Autowired
     private AsyncRestGatewayService asyncRestGatewayService;
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/wiremock", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String index() {
         String response = restGatewayService.getThirdPartyResponse();
@@ -26,13 +26,13 @@ public class ApplicationController {
         return response;
     }
 
-    @RequestMapping(path = "async", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/async", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String async() throws Exception {
         return asyncRestGatewayService.retrieveDataAsync();
     }
 
-    @RequestMapping(path = "nonasync", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/nonasync", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String nonasync() {
         return asyncRestGatewayService.retrieveData();
