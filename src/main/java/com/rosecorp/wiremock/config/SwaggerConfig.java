@@ -28,7 +28,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("JavaInUse API")
+        return new ApiInfoBuilder().title("Example API")
                 .description("Example API reference for developers")
                 .termsOfServiceUrl("http://example.com")
                 .licenseUrl("example@gmail.com").version("1.0").build();
