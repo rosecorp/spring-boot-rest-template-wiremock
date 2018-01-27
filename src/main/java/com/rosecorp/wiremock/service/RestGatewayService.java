@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalTime;
+
 @Service
 public class RestGatewayService {
 
@@ -29,6 +31,9 @@ public class RestGatewayService {
 
         return response.getBody();
     }
+
+
+
 
 
 }
