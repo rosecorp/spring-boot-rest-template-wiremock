@@ -13,8 +13,6 @@ public class FunctionalInterfaceTest {
     private List<Variant> variants = new ArrayList<>();
     private Product p1;
 
-    private VariantProcessor variantProcessor = (Variant v) -> p1.withVariants(variants);
-
     @Before
     public void before() {
         v1 = new Variant();
@@ -26,16 +24,47 @@ public class FunctionalInterfaceTest {
     @Test
     public void test() {
 
-        p1 = Product.createProduct(1, "product");
-        Assert.assertEquals("Product{id=1, name='product', variants=[]}", p1.toString());
+        p1 = new Product(1, "product", null);
+        ProductWrapper pw = ProductWrapper.product(p1);
+        Assert.assertEquals("ProductWrapper{product=Product{id=1, name='product', variants=null}}", pw.toString());
 
-        Product newP = variantProcessor.enrich(v1);
-        Assert.assertEquals("Product{id=1, name='product', variants=[Variant{id=1, amount=1}]}", newP.toString());
+        ProductWrapper pwNew = pw.withVariant(v1);
+        Assert.assertEquals("ProductWrapper{product=Product{id=1, name='product', variants=[Variant{id=1, amount=1}]}}", pwNew.toString());
+
+        Product product = pwNew.getProduct();
+        Assert.assertEquals("Product{id=1, name='product', variants=[Variant{id=1, amount=1}]}", product.toString());
+
     }
 
-    @FunctionalInterface
-    interface VariantProcessor {
-        Product enrich(Variant v);
+
+    private static class ProductWrapper {
+        private final Product product;
+
+        public ProductWrapper withVariant(Variant variant) {
+            List<Variant> variants = new ArrayList<>();
+            variants.add(variant);
+
+            return new ProductWrapper(new Product(product.getId(), product.getName(), variants));
+        }
+
+        public static ProductWrapper product(Product product) {
+            return new ProductWrapper(product);
+        }
+
+        private ProductWrapper(Product product) {
+            this.product = product;
+        }
+
+        public Product getProduct() {
+            return product;
+        }
+
+        @Override
+        public String toString() {
+            return "ProductWrapper{" +
+                    "product=" + product +
+                    '}';
+        }
     }
 
     private static class Variant {
@@ -68,25 +97,11 @@ public class FunctionalInterfaceTest {
     }
 
     private static class Product {
-        private final Integer id;
-        private final String name;
-        private final List<Variant> variants;
+        private Integer id;
+        private String name;
+        private List<Variant> variants;
 
-        public Product withVariants(List<Variant> variants) {
-            return new Product(id, name, variants);
-        }
-
-        public static Product createProduct(Integer id, String name) {
-            return new Product(id, name);
-        }
-
-        private Product(Integer id, String name) {
-            this.id = id;
-            this.name = name;
-            this.variants = new ArrayList<>();
-        }
-
-        private Product(Integer id, String name, List<Variant> variants) {
+        public Product(Integer id, String name, List<Variant> variants) {
             this.id = id;
             this.name = name;
             this.variants = variants;
@@ -96,12 +111,24 @@ public class FunctionalInterfaceTest {
             return id;
         }
 
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
         public String getName() {
             return name;
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public List<Variant> getVariants() {
             return variants;
+        }
+
+        public void setVariants(List<Variant> variants) {
+            this.variants = variants;
         }
 
         @Override
@@ -112,5 +139,8 @@ public class FunctionalInterfaceTest {
                     ", variants=" + variants +
                     '}';
         }
+
     }
+
+
 }
