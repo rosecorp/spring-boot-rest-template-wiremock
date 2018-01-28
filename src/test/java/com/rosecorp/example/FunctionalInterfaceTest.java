@@ -4,8 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class FunctionalInterfaceTest {
 
@@ -37,7 +38,7 @@ public class FunctionalInterfaceTest {
 
     }
 
-    private static class ProductProcessor {
+    private final static class ProductProcessor {
         private final Product product;
 
         public static ProductProcessor of(Product product) {
@@ -45,7 +46,7 @@ public class FunctionalInterfaceTest {
         }
 
         public ProductProcessor enrich(Variant variant) {
-            return productProcessor(newProductInstanceWith(Arrays.asList(variant)));
+            return productProcessor(newProductInstanceWith(asList(variant)));
         }
 
         private Product newProductInstanceWith(List<Variant> variants) {
