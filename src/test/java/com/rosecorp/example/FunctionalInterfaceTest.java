@@ -21,6 +21,12 @@ public class FunctionalInterfaceTest {
     }
 
     @Test
+    public void testTrait() {
+        DoSmth doSmth = new DoSmth();
+        doSmth.sayHi();
+    }
+
+    @Test
     public void test() {
 
         p1 = new Product(1, "p1", null);
@@ -36,6 +42,16 @@ public class FunctionalInterfaceTest {
         // check if original product object didn't change.
         Assert.assertEquals("Product{id=1, name='p1', variants=null}", p1.toString());
 
+    }
+
+    private class DoSmth implements Trait {
+
+    }
+
+    private interface Trait {
+        default void sayHi() {
+            System.out.println("Hi from InterfaceA");
+        }
     }
 
     private final static class ProductProcessor {

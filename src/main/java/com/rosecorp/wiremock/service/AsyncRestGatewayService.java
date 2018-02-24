@@ -1,5 +1,6 @@
 package com.rosecorp.wiremock.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,11 +11,8 @@ import java.util.concurrent.TimeoutException;
 @Service
 public class AsyncRestGatewayService {
 
+    @Autowired
     private RestTemplate restTemplate;
-
-    public AsyncRestGatewayService() {
-        restTemplate = new RestTemplate();
-    }
 
     public String retrieveDataAsync() throws TimeoutException {
         long startTime = System.nanoTime();
@@ -61,7 +59,7 @@ public class AsyncRestGatewayService {
 
     public String retrieveDataGoogle() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -73,7 +71,7 @@ public class AsyncRestGatewayService {
 
     public String retrieveDataBing() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
